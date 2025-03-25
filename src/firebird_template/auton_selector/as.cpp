@@ -11,8 +11,8 @@ class Auton {
         }
 };
 
-inline std::vector<Auton> autons = {Auton("No Auton", [](){})};
-inline int current_auton = 1; // CHANGE TO -1 FOR MATCHES
+inline std::vector<Auton> autons = {};
+inline int current_auton = 0; // CHANGE TO -1 FOR MATCHES
 inline lv_obj_t * screen = nullptr;
 inline bool alive = false;
 inline pros::Task limlib_integration([](){});
@@ -20,8 +20,10 @@ inline lemlib::Chassis * c = nullptr;
 inline pros::adi::DigitalIn auton_btn('a');
 
 void as::kill() {
-    lv_obj_del(screen);
-    alive = false;
+    if (alive){
+        lv_obj_del(screen);
+        alive = false;
+    }
 }
 
 void as::call_selected_auton() {
@@ -129,5 +131,8 @@ void as::init() {
             current_auton = index;
             lv_label_set_text(lvl, ("Selected Auton:\n"+autons.at(index).Name).c_str());
         }, LV_EVENT_CLICKED, NULL);
+        if (i == 0) {
+            lv_label_set_text(auton_lable, ("Selected Auton:\n"+autons.at(0).Name).c_str());
+        }
     }
 }

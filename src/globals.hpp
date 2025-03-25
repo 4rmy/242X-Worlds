@@ -1,28 +1,39 @@
+#pragma once
+
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/imu.hpp"
 #include "pros/motor_group.hpp"
 
+// firebird template
+#include "firebird_template/lcd/lcd.h"
+#include "firebird_template/auton_selector/as.h"
+
+// QOL
 inline auto CCW_COUNTERCLOCKWISE = lemlib::AngularDirection::CCW_COUNTERCLOCKWISE;
 inline auto CW_CLOCKWISE = lemlib::AngularDirection::CW_CLOCKWISE;
+inline void delay(const uint32_t milliseconds) { pros::delay(milliseconds); }
+inline const int CONTROLLER_DELAY = 10;
 
+// bot configuration
+inline pros::Controller controller(pros::E_CONTROLLER_MASTER);
 inline pros::MotorGroup left_motors({10, -8, -9}, pros::MotorGearset::blue);
 inline pros::MotorGroup right_motors({-19, 6, 5}, pros::MotorGearset::blue);
-
 inline pros::Imu imu(15);
-
 /*
 inline pros::Rotation vert(-17);
-inline lemlib::TrackingWheel vert_tracking(&vert, 2, 1.125, 1.0);
 inline pros::Rotation horiz(16);
-inline lemlib::TrackingWheel horiz_tracking(&horiz, 2, -2.75, 1.0);
 */
 
-// constants
+// Lemlib Configuration
 inline float track_width = 11;
 inline float wheel_diameter = lemlib::Omniwheel::NEW_275;
 inline float rpm = 450.0;
 inline float horizontal_drift = 2.0;
+/*
+inline lemlib::TrackingWheel vert_tracking(&vert, 2, 1.125, 1.0);
+inline lemlib::TrackingWheel horiz_tracking(&horiz, 2, -2.75, 1.0);
+*/
 
 // drivetrain controller
 inline lemlib::Drivetrain
@@ -82,4 +93,12 @@ inline lemlib::Chassis
         sensors
     );
 
-inline pros::Controller controller(pros::E_CONTROLLER_MASTER);
+// Autons
+#include "autons/auton.h"
+inline void auton_init() {
+    as::c = &chassis;
+
+    as::add_auton(as::Auton("Auton", auton));
+    
+    as::init();
+}
