@@ -99,6 +99,6 @@ inline void auton_init() {
     as::c = &chassis;
 
     as::add_auton(as::Auton("Auton", auton));
-    
+
     as::init();
 }

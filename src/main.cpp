@@ -1,5 +1,4 @@
 #include "main.h"
-#include "firebird_template/auton_selector/as.h"
 #include "globals.hpp"
 
 void initialize() {
